@@ -27,11 +27,10 @@ class FileStorage:
                 parts = key.split('.')
                 classname = parts[0]
                 if cls == classname:
-                    selected.update({key:value})
+                    selected.update({key: value})
 
             print(selected)
             return selected
-
 
     def new(self, obj):
         """

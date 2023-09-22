@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from models.base_model import BaseModel, Base
 from models import storage_type
 
+
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
     __tablename__ = 'cities'
@@ -11,7 +12,7 @@ class City(BaseModel, Base):
     if storage_type == "db":
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'),
-                      nullable=False)
+                          nullable=False)
     else:
         name = ""
         state_id = ""
