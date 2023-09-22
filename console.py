@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import storage_type
 
 
 class HBNBCommand(cmd.Cmd):
@@ -115,42 +116,33 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        ## A message for Godwin Okpe:
-        # I sincerely apologize for delaying the work. This create function is well, functional
-        # However, not bug proof hence the debug mode.
         self.debug = 0
         if self.debug:
             print("{}".format(args))
 
         args_list = args.split(" ")
         class_name = args_list[0]
-        
+
         if not args:
             print("** class name missing **")
             return
         elif class_name not in HBNBCommand.classes:
 
-
-            if self.debug:   
+            if self.debug:
                 print(class_name)
-
 
             print("** class doesn't exist **")
             return
 
-        
-
         args_dict = {}
         for param in args_list:
             arg_tuple = HBNBCommand.validate_param_syntax(param)
-    
+
             if not arg_tuple:
                 continue
 
             key = arg_tuple[0]
             value = arg_tuple[1]
-
-
 
             if self.debug:
                 print("Checked Validate_param")
@@ -158,18 +150,16 @@ class HBNBCommand(cmd.Cmd):
             typed_value = HBNBCommand.validate_param_value(value)
 
             if self.debug:
-                print(f"Value is {typed_value} and is of type {type(typed_value).__name__}\n {key} = {typed_value}")
+                print(f"Value is {typed_value} and is of type "
+                      f"{type(typed_value).__name__}\n {key} = {typed_value}")
 
             if not typed_value:
                 continue
 
             args_dict[key] = typed_value
 
-
         if self.debug:
             print(args_dict)
-        
-
 
         new_instance = HBNBCommand.classes[class_name]()
         for key in args_dict.keys():
@@ -187,7 +177,7 @@ class HBNBCommand(cmd.Cmd):
 
             value = value.strip('"')
             if "_" in value:
-                value = value.replace("_"," ")
+                value = value.replace("_", " ")
                 value = value.strip()
             return (value)
 
@@ -230,7 +220,7 @@ class HBNBCommand(cmd.Cmd):
             return None
 
         if debug:
-            print (f"\n\nValidate_param_syntax:{arg_tuple}")
+            print(f"\n\nValidate_param_syntax:{arg_tuple}")
         return (arg_tuple)
 
     def help_create(self):
@@ -310,13 +300,16 @@ class HBNBCommand(cmd.Cmd):
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
-            print(HBNBCommand.classes[args])
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            selected = storage.all(args)
-            for k in selected:
-                print_list.append(str(selected[k]))
+            if storage_type == "db":
+                for k, v in storage.all(HBNBCommand.classes[args]).items():
+                    print_list.append(str(v))
+            else:
+                selected = storage.all(args)
+                for k in selected:
+                    print_list.append(str(selected[k]))
         else:
             for k, v in storage.all().items():
                 print_list.append(str(v))
@@ -427,6 +420,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
