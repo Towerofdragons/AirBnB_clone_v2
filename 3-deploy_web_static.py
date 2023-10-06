@@ -8,6 +8,11 @@ from datetime import datetime
 import os
 
 
+env.user = "ubuntu"
+env.hosts = ["54.196.42.35", "34.229.56.179"]
+env.key_filename = "~/.ssh/school"
+
+
 def do_pack():
     """
     Fab function to create a .tgz archive.
@@ -28,7 +33,7 @@ def do_deploy(archive_path):
     """
     if not os.path.exists(archive_path):
         return False
-    env.hosts = ["54.196.42.35", "34.229.56.179"]
+
     try:
         archive_file = os.path.basename(archive_path)
         archive_name = archive_file.split(".")[0]
@@ -48,3 +53,13 @@ def do_deploy(archive_path):
         return True
     except Exception as e:
         return False
+
+
+def deploy():
+    """
+    Deploy the web_static content to the web servers.
+    """
+    archive_path = do_pack()
+    if archive_path is None:
+        return False
+    return do_deploy(archive_path)
