@@ -20,16 +20,12 @@ class FileStorage:
         Returns a dictionary of models currently in storage
         """
         if cls is None:
-            return self.__objects
+            return FileStorage.__objects
         else:
             selected = {}
-            for key, value in self.__objects.items():
-                parts = key.split('.')
-                classname = parts[0]
-                if cls == classname:
+            for key, value in FileStorage.__objects.items():
+                if key.startswith(cls.__name__):
                     selected.update({key: value})
-
-            print(selected)
             return selected
 
     def new(self, obj):
@@ -85,3 +81,10 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
         FileStorage.save(self)
+
+    def close(self):
+        """
+        Method to call reload method for
+        deserialization of json file
+        """
+        self.reload()
