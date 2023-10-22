@@ -22,6 +22,7 @@ def state_list():
     print(states)
     return render_template('7-states_list.html', states=states)
 
+
 @app.teardown_appcontext
 def tearDown(self):
     """
