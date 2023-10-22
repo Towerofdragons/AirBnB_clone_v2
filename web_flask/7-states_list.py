@@ -19,7 +19,6 @@ def state_list():
     from models.base_model import BaseModel
     from models.state import State
     states = storage.all(State)
-    print(states)
     return render_template('7-states_list.html', states=states)
 
 
