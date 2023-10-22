@@ -8,13 +8,13 @@
         <UL>
 	{% for state in states.values() |sort(attribute="name") %}
 	    <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
-	        <UL> 
+	    <UL> 
 		{% for city in cities.values() |sort(attribute="name") %}
 		{% if city.state_id == state.id %}
-		    <LI>City: {{ city.id }}: <B>{{ city.name }}</B></LI>
+		<LI>City: {{ city.id }}: <B>{{ city.name }}</B></LI>
 		{% endif %}
 		{% endfor %}
-		</UL>
+	    </UL>
 	{% endfor %}
         </UL>
     </BODY>
