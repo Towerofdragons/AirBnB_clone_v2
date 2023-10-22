@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 Script to start a flask application and listen on port 5000
-and configure the route /states and /states/<id> to be 
+and configure the route /states and /states/<id> to be
 rendered with template that uses data fetched from the backend
 """
 from flask import Flask, request, render_template
@@ -38,7 +38,7 @@ def state_by_id(id):
         all_cities = storage.all(City).values()
         cities = [city for city in all_cities if city.state_id == state.id]
         return render_template('9-states.html', state=state,
-                           cities=cities)
+                               cities=cities)
     else:
         return render_template('9-states.html')
 
