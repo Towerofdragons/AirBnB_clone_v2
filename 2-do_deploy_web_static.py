@@ -25,6 +25,9 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """
+    Deploy Archive to servers, unpack and establish as relevant version.
+    """
     if not os.path.exists(archive_path):
         return false
 
