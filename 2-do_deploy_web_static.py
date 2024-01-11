@@ -31,21 +31,23 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return false
 
-    arch_base_name = archive_path.split("/")
-    arch_file = arch_base_name[-1].split(".")
-    arch_name = arch_file[0]
+    arch_split_path = archive_path.split("/")
+    arch_base_name = arch_split_path[-1]
+    arch_file = arch_base_name
+    arch_name_split = arch_file.split(".")
+    arch_name = arch_name_split[0]
 
-    print(arch_name)
+    #print(arch_name)
 
     try:
 
         put(archive_path, '/tmp/')
-        arch_dir = f'mkdir -p /data/web_static/releases/{arch_name}'
-        run(f'mkdir -p {arch_dir}')
-        run(f'tar -zvxf {archive_path} -C {arch_dir}')
-        run(f"rm /tmp/{arch_base_name}")
-        run("rm /data/web_static/current")
-        run(f"ln -sf /data/web_static/releases/{arch_dir} /data/web_static/current")
+        arch_dir = f'/data/web_static/releases/{arch_name}'
+        sudo(f'mkdir -p {arch_dir}')
+        sudo(f'tar -zvxf /tmp/{arch_base_name} -C {arch_dir}')
+        sudo(f"rm /tmp/{arch_base_name}")
+        sudo("rm /data/web_static/current")
+        sudo(f"ln -sf /data/web_static/releases/{arch_dir} /data/web_static/current")
         return True
 
     except Exception:
